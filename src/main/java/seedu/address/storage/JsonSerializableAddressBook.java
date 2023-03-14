@@ -15,6 +15,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyCategoryList;
 import seedu.address.model.category.Category;
+import seedu.address.model.expense.Expense;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 
@@ -28,18 +29,18 @@ class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_CATEGORY = "Category list contains duplicate categories!";
 
-    private final List<JsonAdaptedPerson> persons = new ArrayList<>();
-
     private final List<JsonAdaptedCategory> categories = new ArrayList<>();
+
+    private final List<JsonAdaptedExpense> expenses = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
      */
     @JsonCreator
     public JsonSerializableAddressBook(@JsonProperty("categories") List<JsonAdaptedCategory> listOfCategories,
-                                       @JsonProperty("persons") List<JsonAdaptedPerson> persons) {
+                                       @JsonProperty("expenses") List<JsonAdaptedExpense> listOfExpenses) {
         this.categories.addAll(listOfCategories);
-        this.persons.addAll(persons);
+        this.expenses.addAll(listOfExpenses);
     }
 
     /**
@@ -50,8 +51,8 @@ class JsonSerializableAddressBook {
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
         this.categories.addAll(source.getCategoryList()
                 .stream().map(JsonAdaptedCategory::new).collect(Collectors.toList()));
-        persons.addAll(source.getPersonList()
-                .stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        this.expenses.addAll(source.getExpenseList()
+                .stream().map(JsonAdaptedExpense::new).collect(Collectors.toList()));
     }
 
 
@@ -66,23 +67,16 @@ class JsonSerializableAddressBook {
 
         for (JsonAdaptedCategory jsonAdaptedCategory : categories) {
             Category category = jsonAdaptedCategory.toModelType();
-//            if (addressBook.hasCategory(category)) {
-//                throw new IllegalValueException(MESSAGE_DUPLICATE_CATEGORY);
-//            }
+
             addressBook.addCategory(category);
         }
 
-        for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
-            Person person = jsonAdaptedPerson.toModelType();
-//            if (addressBook.hasCategory(category)) {
-//                throw new IllegalValueException(MESSAGE_DUPLICATE_CATEGORY);
-//            }
-            addressBook.addPerson(person);
+        for (JsonAdaptedExpense jsonAdaptedExpense : expenses) {
+            Expense expense = jsonAdaptedExpense.toModelType();
+
+            addressBook.addExpense(expense);
         }
 
-//        if (addressBook.getCategoryList().size() == 2) {
-//            throw new IllegalValueException("Categories have been loaded!");
-//        }
         return addressBook;
     }
 

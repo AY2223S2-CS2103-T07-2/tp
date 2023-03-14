@@ -1,13 +1,12 @@
 {
-  "categories" : [ {
-    "categoryName" : "test2",
-    "summary" : "test2 desc"
-  }, {
-    "categoryName" : "hi",
-    "summary" : "test"
-  }, {
-    "categoryName" : "dwdw",
-    "summary" : "dwdw"
-  } ],
-  "persons" : [ ]
+  "categories" : [ ],
+  "expenses" : [ {
+    "name" : "sgfb",
+    "amount" : 4.5,
+    "date" : "2023-03-14T19:00:58.800+0000",
+    "category" : {
+      "categoryName" : "dfbwrnrwn",
+      "summary" : ""
+    }
+  } ]
 }

@@ -6,7 +6,9 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.category.Category;
+import seedu.address.model.expense.Expense;
 import seedu.address.model.category.UniqueCategoryList;
+import seedu.address.model.expense.ExpenseList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -18,6 +20,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
     private final UniqueCategoryList categories;
+    private final ExpenseList expenses;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -29,6 +32,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         persons = new UniquePersonList();
         categories = new UniqueCategoryList();
+        expenses = new ExpenseList();
     }
 
     public AddressBook() {}
@@ -53,13 +57,15 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     public void setCategories(List<Category> categories) { this.categories.setCategoryList(categories); }
 
+    public void setExpenses(List<Expense> expenses) { this.expenses.setExpenseList(expenses); }
+
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
-
-//        setPersons(newData.getPersonList());
+        setPersons(newData.getPersonList());
+        setExpenses(newData.getExpenseList());
         setCategories(newData.getCategoryList());
     }
 
@@ -130,6 +136,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public ObservableList<Expense> getExpenseList() {
+        return expenses.asUnmodifiableList();
+    }
+
+    @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddressBook // instanceof handles nulls
@@ -139,5 +150,18 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return persons.hashCode();
+    }
+
+    // TODO merge with Isaac's segment
+    public boolean hasCategory(String categoryName) {
+        return true;
+    }
+
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
+    }
+
+    public void deleteExpense(Expense expense) {
+        expenses.remove(expense);
     }
 }

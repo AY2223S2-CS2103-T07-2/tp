@@ -12,7 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.category.Category;
-import seedu.address.model.category.UniqueCategoryList;
+import seedu.address.model.expense.Expense;
 import seedu.address.model.person.Person;
 
 /**
@@ -24,7 +24,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
-
+    private final FilteredList<Expense> filteredExpenses;
     private final FilteredList<Category> filteredCategories;
 
     /**
@@ -38,6 +38,7 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredExpenses = new FilteredList<>(this.addressBook.getExpenseList());
         filteredCategories = new FilteredList<>(this.addressBook.getCategoryList());
     }
 
@@ -143,28 +144,12 @@ public class ModelManager implements Model {
         return filteredPersons;
     }
 
-    @Override
-    public ObservableList<Category> getFilteredCategoryList() {
-        return filteredCategories;
-    }
-
-    @Override
-    public ObservableList<Category> getCategoryList() {
-        return addressBook.getCategoryList();
-    }
 
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
     }
-
-    @Override
-    public void updateFilteredCategoryList(Predicate<Category> predicate) {
-        requireNonNull(predicate);
-        filteredCategories.setPredicate(predicate);
-    }
-
 
 
     @Override
@@ -184,6 +169,60 @@ public class ModelManager implements Model {
         return addressBook.equals(other.addressBook)
                 && userPrefs.equals(other.userPrefs)
                 && filteredPersons.equals(other.filteredPersons);
+    }
+
+    //=========== Category List Accessors =============================================================
+
+    @Override
+    public ObservableList<Category> getFilteredCategoryList() {
+        return filteredCategories;
+    }
+
+    @Override
+    public ObservableList<Category> getCategoryList() {
+        return addressBook.getCategoryList();
+    }
+
+    @Override
+    public void updateFilteredCategoryList(Predicate<Category> predicate) {
+        requireNonNull(predicate);
+        filteredCategories.setPredicate(predicate);
+    }
+
+
+    @Override
+    public boolean hasCategory(String categoryName) {
+        requireNonNull(categoryName);
+        return addressBook.hasCategory(categoryName);
+    }
+
+    //=========== Filtered Expense List Accessors =============================================================
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Expense} backed by the internal list of
+     * {@code versionedAddressBook}
+     */
+    @Override
+    public ObservableList<Expense> getFilteredExpenseList() {
+        return filteredExpenses;
+    }
+
+    @Override
+    public void updateFilteredExpensesList(Predicate<Expense> predicate) {
+        requireNonNull(predicate);
+        filteredExpenses.setPredicate(predicate);
+    }
+
+    @Override
+    public void addExpense(Expense expense) {
+        addressBook.addExpense(expense);
+        updateFilteredExpensesList(PREDICATE_SHOW_ALL_EXPENSES);
+    }
+
+    @Override
+    public void deleteExpense(Expense expense) {
+        addressBook.deleteExpense(expense);
+        updateFilteredExpensesList(PREDICATE_SHOW_ALL_EXPENSES);
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.category.Category;
+import seedu.address.model.expense.Expense;
 import seedu.address.model.person.Person;
 
 /**
@@ -14,6 +15,7 @@ import seedu.address.model.person.Person;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Expense> PREDICATE_SHOW_ALL_EXPENSES = unused -> true;
     Predicate<Category> PREDICATE_SHOW_ALL_CATEGORY = unused -> true;
 
     /**
@@ -88,9 +90,17 @@ public interface Model {
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
 
-    ObservableList<Category> getFilteredCategoryList();
-
+    /** Returns an unmodifiable view of the category list */
     ObservableList<Category> getCategoryList();
+
+
+    /** Returns whether a category is present in the category list by name*/
+    boolean hasCategory(String categoryName);
+
+    /** Returns an unmodifiable view of the filtered expense list */
+    ObservableList<Expense> getFilteredExpenseList();
+
+    ObservableList<Category> getFilteredCategoryList();
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
@@ -98,5 +108,11 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
+    void updateFilteredExpensesList(Predicate<Expense> predicate);
+
     void updateFilteredCategoryList(Predicate<Category> predicate);
+
+    void addExpense(Expense expense);
+
+    void deleteExpense(Expense expense);
 }
